@@ -26,4 +26,92 @@ b. Cài đặt đơn giản
 
 c. Được tích hợp trực tiếp trên windows  
 d. Tương thích tuyệt đối với docker  
-=> 
+=> Lựa chọn phương án  Enable WSL và cài đặt Docker Desktop vì đây là cách nhanh nhất, nhẹ nhàng và dễ sử dụng nhất để tạo môi trường linux trên windows  
+## 2. Cài đặt Docker desktop
+Truy cập đường link : ```https://docs.docker.com/desktop/setup/install/windows-install/``` để tải và cài docker về máy
+## 3. Sử dụng 1 file docker-compose.yml để cài đặt các docker container sau: 
+Vào File Explorer tạo 1 folder có tên bất kì (EX: MyWebApp) để chứa file docker-compose.yml.
+có thể khởi tạo các container thông qua Visual Studio Code 
+```
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: mariadb
+      PMA_USER: root
+      PMA_PASSWORD: root
+    ports:
+      - "8080:80"
+    depends_on:
+      - mariadb
+
+  nodered:
+    image: nodered/node-red:latest
+    container_name: nodered
+    restart: always
+    ports:
+      - "1880:1880"
+    volumes:
+      - nodered_data:/data
+
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    restart: always
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb_data:/var/lib/influxdb
+    environment:
+      - INFLUXDB_DB=mydb
+      - INFLUXDB_ADMIN_ENABLED=true
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_PASSWORD=admin123
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - influxdb
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+    volumes:
+      - grafana_data:/var/lib/grafana
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/html:/usr/share/nginx/html
+      - ./nginx/conf:/etc/nginx/conf.d
+
+volumes:
+  mariadb_data:
+  nodered_data:
+  influxdb_data:
+  grafana_data:
+```
