@@ -115,3 +115,7 @@ volumes:
   influxdb_data:
   grafana_data:
 ```
+Sau khi lưu file, ta vào terminal trong VSCode chạy file với dòng lệnh ```docker compose up -d```
+Sau khi chạy ta được:
+<img width="1107" height="733" alt="image" src="https://github.com/user-attachments/assets/17f3c01a-e1ef-4e72-a74c-4addd9ec7324" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/3c198ad8-d6f0-4c9d-8efa-d9c07b853d88" />
