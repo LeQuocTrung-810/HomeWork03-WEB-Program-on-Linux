@@ -138,6 +138,7 @@ Mục tiêu:
 ## 5. Nginx làm web-server
 
 - Cấu hình nginx để chạy được website qua url http://fullname.com  (thay fullname bằng chuỗi ko dấu viết liền tên của bạn)
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/a4e4c9f9-ee4e-4519-ad7c-e666c2f2989d" />
 
 - Cấu hình nginx để http://fullname.com/nodered truy cập vào nodered qua cổng 80, (dù nodered đang chạy ở port 1880)
 
