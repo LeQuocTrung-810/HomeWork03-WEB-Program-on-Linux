@@ -33,6 +33,8 @@ Truy cập đường link : ```https://docs.docker.com/desktop/setup/install/win
 Vào File Explorer tạo 1 folder có tên bất kì (EX: MyWebApp) để chứa file docker-compose.yml.
 có thể khởi tạo các container thông qua Visual Studio Code 
 ```
+version: "3.9"
+
 services:
   mariadb:
     image: mariadb:latest
@@ -41,12 +43,10 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: mydb
-      MYSQL_USER: user
-      MYSQL_PASSWORD: user123
     ports:
       - "3306:3306"
     volumes:
-      - mariadb_data:/var/lib/mysql
+      - ./db_data:/var/lib/mysql
 
   phpmyadmin:
     image: phpmyadmin:latest
@@ -68,7 +68,9 @@ services:
     ports:
       - "1880:1880"
     volumes:
-      - nodered_data:/data
+      - ./nodered_data:/data
+    depends_on:
+      - mariadb
 
   influxdb:
     image: influxdb:latest
@@ -76,13 +78,12 @@ services:
     restart: always
     ports:
       - "8086:8086"
-    volumes:
-      - influxdb_data:/var/lib/influxdb
     environment:
       - INFLUXDB_DB=mydb
-      - INFLUXDB_ADMIN_ENABLED=true
       - INFLUXDB_ADMIN_USER=admin
-      - INFLUXDB_ADMIN_PASSWORD=admin123
+      - INFLUXDB_ADMIN_PASSWORD=admin
+    volumes:
+      - ./influx_data:/var/lib/influxdb
 
   grafana:
     image: grafana/grafana:latest
@@ -92,38 +93,44 @@ services:
       - "3000:3000"
     depends_on:
       - influxdb
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin123
-    volumes:
-      - grafana_data:/var/lib/grafana
 
   nginx:
     image: nginx:latest
     container_name: nginx
     restart: always
     ports:
-      - "80:80"
+      - "81:80"
       - "443:443"
     volumes:
-      - ./nginx/html:/usr/share/nginx/html
-      - ./nginx/conf:/etc/nginx/conf.d
-
-volumes:
-  mariadb_data:
-  nodered_data:
-  influxdb_data:
-  grafana_data:
+      - ./html:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/conf/nginx.conf
+    depends_on:
+      - phpmyadmin
+      - nodered
 ```
 Sau khi lưu file, ta vào terminal trong VSCode chạy file với dòng lệnh ```docker compose up -d```
 Sau khi chạy ta được:
 <img width="1107" height="733" alt="image" src="https://github.com/user-attachments/assets/17f3c01a-e1ef-4e72-a74c-4addd9ec7324" />
+Sau khi chạy code sẽ tạo ra các container trong Docker desktop  
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/3c198ad8-d6f0-4c9d-8efa-d9c07b853d88" />
-
+Truy cập http://localhost:1880   
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/47f9f423-c29d-497b-89cc-c06aeec7b504" />
-
+Truy cập http://localhost:3000   
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/19207e04-39f9-4d33-8b1a-e7281aa84f2d" />
-
+Truy cập http://localhost:8080   
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/e8a02169-ce4f-40d6-be58-61ee00a9461c" />
+Truy cập http://localhost:81  
+<img width="1919" height="1036" alt="image" src="https://github.com/user-attachments/assets/82d257fb-290c-4fcd-bf32-feb443291cad" />
 
+## 4. Lập trình front-end và back-end (Web IoT)
+Mục tiêu:
 
+- Tạo 1 web iot giám sát nhiệt độ và độ ẩm
+
+- Node-RED sinh dữ liệu cảm biến (giả lập).
+
+- Node-RED lưu vào InfluxDB để hiển thị biểu đồ.
+
+- Frontend index.html gọi API từ Node-RED, hiển thị thông tin hiện tại.
+
+- Grafana vẽ biểu đồ trực quan từ dữ liệu InfluxDB.
