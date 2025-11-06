@@ -119,3 +119,11 @@ Sau khi lưu file, ta vào terminal trong VSCode chạy file với dòng lệnh 
 Sau khi chạy ta được:
 <img width="1107" height="733" alt="image" src="https://github.com/user-attachments/assets/17f3c01a-e1ef-4e72-a74c-4addd9ec7324" />
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/3c198ad8-d6f0-4c9d-8efa-d9c07b853d88" />
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/47f9f423-c29d-497b-89cc-c06aeec7b504" />
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/19207e04-39f9-4d33-8b1a-e7281aa84f2d" />
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/e8a02169-ce4f-40d6-be58-61ee00a9461c" />
+
+
